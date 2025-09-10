@@ -19,6 +19,7 @@ module.exports = antfu(
       'ts/no-require-imports': 'off',
       'ts/no-unused-vars': 'off',
       'unused-imports/no-unused-vars': 'off',
+      'no-console': 'off',
     },
   },
 )

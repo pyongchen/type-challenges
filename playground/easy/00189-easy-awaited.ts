@@ -22,7 +22,15 @@
 
 /* _____________ 你的代码 _____________ */
 
-type MyAwaited<T> = any
+type MyAwaitedMy<T> = T extends Promise<infer R> ? MyAwaitedMy<R> : (
+  T extends {
+    then: (onfulfilled: (params: infer Arg) => any) => any
+  } ? Arg : T
+);
+
+type MyAwaited<T extends PromiseLike<any>> = T extends PromiseLike<infer U> ? (
+  U extends PromiseLike<any> ? MyAwaited<U> : U
+) : never;
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -47,3 +55,4 @@ type cases = [
   > 查看解答：https://tsch.js.org/189/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+type res1 = MyAwaited<T>;

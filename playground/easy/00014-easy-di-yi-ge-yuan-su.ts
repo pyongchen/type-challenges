@@ -22,7 +22,7 @@
 
 /* _____________ 你的代码 _____________ */
 
-type First<T extends any[]> = any
+type First<T extends any[]> = T extends [] ? never : T[0]
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -46,4 +46,5 @@ type errors = [
   > 分享你的解答：https://tsch.js.org/14/answer/zh-CN
   > 查看解答：https://tsch.js.org/14/solutions
   > 更多题目：https://tsch.js.org/zh-CN
+  > 解析：T extends []代表空数组
 */

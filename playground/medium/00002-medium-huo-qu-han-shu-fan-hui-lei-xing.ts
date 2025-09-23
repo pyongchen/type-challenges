@@ -25,7 +25,7 @@
 
 /* _____________ 你的代码 _____________ */
 
-type MyReturnType<T> = any
+type MyReturnType<T extends (...arg: any) => any> = T extends (...arg: any) => infer Res ? Res : never;
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

@@ -36,15 +36,21 @@
 
 /* _____________ 你的代码 _____________ */
 
-type DeepReadonly<T> = any
+type DeepReadonly<T extends object> = {
+  readonly [K in keyof T]: T[K] extends object ? (T[K] extends Function ?  T[K] : DeepReadonly<T[K]>) : T[K]
+}
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
+import type { Prettify } from '../common/tools';
 
 type cases = [
   Expect<Equal<DeepReadonly<X1>, Expected1>>,
   Expect<Equal<DeepReadonly<X2>, Expected2>>,
 ]
+
+type Res1 = Prettify<DeepReadonly<X1>>;
+type Res2 = Prettify<DeepReadonly<X2>>;
 
 type X1 = {
   a: () => 22

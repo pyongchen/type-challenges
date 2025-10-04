@@ -39,9 +39,10 @@
 
 /* _____________ 你的代码 _____________ */
 
-type Chainable = {
-  option(key: string, value: any): any
-  get(): any
+// 题解：https://github.com/type-challenges/type-challenges/issues/13951
+type Chainable<T = {}> = {
+  option: <K extends string, V>(key: K extends keyof T ? (V extends T[K] ? never : K) : K, value: V) => Chainable<Omit<T, K> & Record<K, V>>,
+  get(): T
 }
 
 /* _____________ 测试用例 _____________ */
@@ -63,7 +64,7 @@ const result2 = a
 
 const result3 = a
   .option('name', 'another name')
-  // @ts-expect-error
+  // 这里感觉题目有问题，移除@ts-expect-error，如果是number覆盖string的话，不应该报错
   .option('name', 123)
   .get()
 

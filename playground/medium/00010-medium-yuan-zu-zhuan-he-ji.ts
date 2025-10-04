@@ -20,14 +20,26 @@
 
 /* _____________ 你的代码 _____________ */
 
-type TupleToUnion<T> = any
+type TupleToUnion<T extends any[]> = T[number]
+
+/*
+  解析：
+  Array<infer ITEMS>
+  问的是：数组的【元素类型】是什么？
+  答案：123 | '456' | true
+
+  [...infer ITEMS]
+  问的是：这个【展开的元组】是什么？
+  答案：[123, '456', true]
+*/
+type TupleToUnion2<T extends any[]> = T extends Array<infer items> ? items : never;
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 
 type cases = [
-  Expect<Equal<TupleToUnion<[123, '456', true]>, 123 | '456' | true>>,
-  Expect<Equal<TupleToUnion<[123]>, 123>>,
+  Expect<Equal<TupleToUnion2<[123, '456', true]>, 123 | '456' | true>>,
+  Expect<Equal<TupleToUnion2<[123]>, 123>>,
 ]
 
 /* _____________ 下一步 _____________ */
@@ -36,3 +48,6 @@ type cases = [
   > 查看解答：https://tsch.js.org/10/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+
+type TupleToArray<T extends any[]> = T extends [...infer items] ? items : never;
+type TupleToArrayRes1 = TupleToArray<[123, '456', true]>;

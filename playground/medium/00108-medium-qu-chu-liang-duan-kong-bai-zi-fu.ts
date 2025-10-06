@@ -18,7 +18,12 @@
 
 /* _____________ 你的代码 _____________ */
 
-type Trim<S extends string> = any
+type Space = ' ' | '\n' | '\t'
+type TrimMy<S extends string> = S extends `${Space}${infer Left}` ? Trim<Left> :
+  S extends `${infer Left}${Space}` ? Trim<Left> : S;
+
+type Trim<S extends string> = S extends `${Space}${infer Left}` | `${infer Left}${Space}` ? Trim<Left> : S;
+
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

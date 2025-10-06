@@ -22,8 +22,11 @@
 */
 
 /* _____________ 你的代码 _____________ */
+// 使用[...T]能精确控制元组每个元素类型的顺序
 
-declare function PromiseAll(values: any): any
+declare function PromiseAll<T extends any[]>(values: [...T]): Promise<{
+  [K in keyof T]: T[K] extends (Promise<infer R> | infer R) ? R : never
+}>
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -48,3 +51,9 @@ type cases = [
   > 查看解答：https://tsch.js.org/20/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+
+
+type Arr = [2, string, boolean]
+type DDD = {
+  [K in keyof Arr]: Arr[K];
+}

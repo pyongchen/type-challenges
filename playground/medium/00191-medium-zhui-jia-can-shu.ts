@@ -23,7 +23,11 @@
 
 /* _____________ 你的代码 _____________ */
 
-type AppendArgument<Fn, A> = any
+type GetFnParams<Fn> = Fn extends (...args: infer R) => any ? R : never
+type GetFnRes<Fn> = Fn extends (...args: infer _) => infer Res ? Res : never
+type AppendArgumentMy<Fn extends Function, A> = (...args: [...GetFnParams<Fn>, A]) => GetFnRes<Fn>
+
+type AppendArgument<Fn extends Function, A> = Fn extends (...args: infer T) => infer R ? (...args: [...T, A]) => R : never;
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

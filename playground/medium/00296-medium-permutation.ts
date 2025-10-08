@@ -16,7 +16,9 @@
 
 /* _____________ 你的代码 _____________ */
 
-type Permutation<T> = any
+// U extends any 用于触发分布式条件类型，对联合类型 U 的每个成员分别执行
+type Permutation<T, U=T> = [T] extends [never] ? [] :
+ U extends any ? [U, ...Permutation<Exclude<T, U>>] : never;
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

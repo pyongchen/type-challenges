@@ -19,7 +19,11 @@
 
 /* _____________ 你的代码 _____________ */
 
-type StringToUnion<T extends string> = any
+type StringToArr<T extends string> = T extends `${infer F}${infer Left}` ? [F, ...StringToArr<Left>] : []
+type StringToUnionMy<T extends string> = StringToArr<T>[number]
+
+type StringToUnion<T extends string, Arr extends string[] = []> =
+  T extends `${infer F}${infer Left}` ? StringToUnion<Left, [F, ...Arr]> : Arr[number]
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

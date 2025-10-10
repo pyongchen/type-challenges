@@ -24,7 +24,19 @@
 
 /* _____________ 你的代码 _____________ */
 
-type KebabCase<S> = any
+/*
+ * 解析：
+ * ? S2 extends Uncapitalize<S2>
+ * 检查 S2 的首字符是否为小写：
+ * 如果 S2 等于其小写版本，说明后面紧跟的是小写字母
+ * 否则说明后面是大写字母（表示新单词的开始）
+ */
+
+type KebabCase<S extends string> = S extends `${infer S1}${infer S2}`
+  ? S2 extends Uncapitalize<S2>
+  ? `${Uncapitalize<S1>}${KebabCase<S2>}`
+  : `${Uncapitalize<S1>}-${KebabCase<S2>}`
+  : S;
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -47,3 +59,4 @@ type cases = [
   > 查看解答：https://tsch.js.org/612/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+type DDD = KebabCase<'FooBarBaz'>;

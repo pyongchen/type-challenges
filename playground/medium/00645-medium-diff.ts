@@ -27,7 +27,19 @@
 
 /* _____________ 你的代码 _____________ */
 
-type Diff<O, O1> = any
+type DiffMy<Obj1, Obj2> = {
+  [K in keyof (Obj1 | keyof Obj2) as
+     K extends keyof Obj1 ? K extends keyof Obj2 ? never : K
+      : K extends keyof Obj2 ? K : never]: K extends keyof Obj1 ? Obj1[K] : K extends keyof Obj2 ? Obj2[K] : never
+}
+
+/*
+ * 解析:
+ * type T1=Foo&Bar;
+ * keyof T1会拿到 Foo和Bar的所有key,因为Foo&Bar 相当于把两个对象merge了。
+ * keyof T2会拿到既存在于Foo，也存在于Bar中的key,因为T2有可能是Foo，也有可能是Bar，所以只有拿共同拥有的key才是安全的。
+ */
+type Diff<Obj1, Obj2> = Omit<Obj1 & Obj2, keyof (Obj1 | Obj2)>
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

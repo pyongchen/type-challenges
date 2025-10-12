@@ -19,7 +19,8 @@
 
 /* _____________ 你的代码 _____________ */
 
-type AnyOf<T extends readonly any[]> = any
+type FalseItem = '' | null | false | 0 | [] | undefined | {[key:string] : never}
+type AnyOf<T extends readonly any[]> = T[number] extends FalseItem ? false : true;
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -43,3 +44,5 @@ type cases = [
   > 查看解答：https://tsch.js.org/949/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+
+type FFF = false extends FalseItem ? 1 : 2

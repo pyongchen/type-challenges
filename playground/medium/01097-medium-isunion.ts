@@ -20,7 +20,21 @@
 
 /* _____________ 你的代码 _____________ */
 
-type IsUnion<T> = any
+/*
+ * B = T 保存原始类型，辅助参数，保存了 T 的完整类型（不会被分布）
+ * 1. [T] extends [never] ? false - 处理 never
+ * 2. T extends B - 触发分布式条件类型
+ *    - 左边的 T 会分布，例如 'a' | 'b' 会分别检查 'a' extends B 和 'b' extends B
+ *    - 右边的 B 不会分布，保持完整的联合类型 'a' | 'b'
+ * 3. [B] extends [T] - 比较完整类型与单个成员
+ *    - 用元组包裹防止分布
+ *    - 对于联合类型的每个成员：
+ *      - ['a' | 'b'] extends ['a'] → false ✅ (说明是联合类型)
+ *      - ['a' | 'b'] extends ['b'] → false ✅ (说明是联合类型)
+ *    - 对于非联合类型：
+ *      - ['a'] extends ['a'] → true (返回 false，不是联合类型)
+ */
+type IsUnion<T, B = T> =[T] extends [never] ? false : T extends B ? [B] extends [T] ? false : true : never
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

@@ -23,7 +23,29 @@
 
 /* _____________ 你的代码 _____________ */
 
-type RemoveIndexSignature<T> = any
+/*
+ * 解析
+ * PropertyKey = string | number | symbol
+ */
+
+type RemoveIndexSignatureSample<T> = {
+  [K in keyof T as
+    /* filters out all 'string' keys */
+    string extends K
+      ? never
+      /* filters out all 'number' keys */
+      : number extends K
+        ? never
+        /* filers out all 'symbol' keys */
+        : symbol extends K
+          ? never 
+          : K /* all that's left are literal type keys */
+  ]: T[K]
+}
+
+type RemoveIndexSignature<T, P = PropertyKey> = {
+  [K in keyof T as P extends K ? never : K extends P ? K : never]: T[K]
+}
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

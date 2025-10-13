@@ -45,10 +45,13 @@
 
 /* _____________ 你的代码 _____________ */
 
-type ReplaceKeys<U, T, Y> = any
+type ReplaceKeys<U, T, Y> = {
+  [K in keyof U]: K extends T ? K extends keyof Y ? Y[K] : never : U[K]
+ }
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
+import type { Prettify } from '../common/tools'
 
 type NodeA = {
   type: 'A'
@@ -113,3 +116,5 @@ type cases = [
   > 查看解答：https://tsch.js.org/1130/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+
+type Res1 = Prettify<ReplaceKeys<Nodes, 'name' | 'flag', { name: number, flag: string }>>

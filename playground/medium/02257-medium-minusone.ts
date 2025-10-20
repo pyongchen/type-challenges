@@ -19,7 +19,20 @@
 
 /* _____________ 你的代码 _____________ */
 
-type MinusOne<T extends number> = any
+type MinusOneMy<T extends number, Arr extends string[] = []> =
+  T extends Arr["length"] ?
+    Arr extends [infer _, ...infer Right] ? Right['length'] : 0
+  : MinusOneMy<T, ['', ...Arr]>
+
+// 解析：https://claude.ai/chat/742b9a06-dfb6-4dc3-9848-dceac45ccd53
+type Map = [9, 0, 1, 2, 3, 4, 5, 6, 7, 8]
+type ReverseString<T extends string> = T extends `${infer First}${infer Rest}` ? `${ReverseString<Rest>}${First}` : T
+type Decrease<T extends string> = T extends `${infer First extends number}${infer Rest}` ?
+ `${Map[First]}${First extends 0 ? Decrease<Rest> : Rest}` : T
+type ParseInt<T extends string> = T extends `${0}${infer Rest}` ?
+ ParseInt<`${Rest}`> : (T extends `${infer N extends number}` ? N : 0)
+type MinusOne<T extends number> = T extends 0 ? -1 : ParseInt<ReverseString<Decrease<ReverseString<`${T}`>>>>
+
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -39,3 +52,7 @@ type cases = [
   > 查看解答：https://tsch.js.org/2257/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+
+// 9801
+type DDD = Decrease<'1089'>
+type DDD2 = ReverseString<DDD>

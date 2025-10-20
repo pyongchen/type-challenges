@@ -30,7 +30,11 @@
 
 /* _____________ 你的代码 _____________ */
 
-type PercentageParser<A extends string> = any
+type GetPrefix<S> = S extends '-' | '+' ? S : never
+type GetSuffix<S> = S extends `${infer Num}%` ? [Num, '%'] : [S, '']
+
+type PercentageParser<A extends string> = A extends `${GetPrefix<infer L>}${infer R}` ? 
+  [L, ...GetSuffix<R>] : ['', ...GetSuffix<A>]
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -69,3 +73,5 @@ type cases = [
   > 查看解答：https://tsch.js.org/1978/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+
+type DDD = PercentageParser<'100%'>;

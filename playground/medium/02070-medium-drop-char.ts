@@ -18,7 +18,13 @@
 
 /* _____________ 你的代码 _____________ */
 
-type DropChar<S, C> = any
+type DropCharMy<S, C extends string> = S extends `${infer F}${infer Right}` ?
+ F extends C ? DropChar<Right, C> : `${F}${DropChar<Right, C>}`
+ : S
+
+type DropChar<S, C extends string> = S extends `${infer Left}${C}${infer Right}` ? 
+  DropChar<`${Left}${Right}`, C>
+  : S
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -40,3 +46,5 @@ type cases = [
   > 查看解答：https://tsch.js.org/2070/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+
+type Res1 = DropChar<'butter fly!', ' '>;

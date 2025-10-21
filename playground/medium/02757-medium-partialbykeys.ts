@@ -26,10 +26,22 @@
 
 /* _____________ 你的代码 _____________ */
 
-type PartialByKeys<T, K> = any
+type PartialByKeysMy<T, K extends keyof T = keyof T> = Prettify<
+  Omit<T, K> & Partial<Pick<T, K>>
+>
+
+type PartialByKeys<T, K extends keyof T = keyof T> = Prettify<
+  {
+    [P in keyof T as P extends K ? never : P]: T[P]
+  } &
+  {
+    [P in keyof T as P extends K ? P : never]?: T[P]
+  }
+>
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
+import type { Prettify } from '../common/tools';
 
 interface User {
   name: string
@@ -63,3 +75,4 @@ type cases = [
   > 查看解答：https://tsch.js.org/2757/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+type DDD = PartialByKeys<User>;

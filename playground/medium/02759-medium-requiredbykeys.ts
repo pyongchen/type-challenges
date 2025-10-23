@@ -27,10 +27,21 @@
 
 /* _____________ 你的代码 _____________ */
 
-type RequiredByKeys<T, K> = any
+type RequiredByKeysMy<T, K extends keyof T = keyof T> = Prettify<
+  Required<Pick<T, K>> & Omit<T, K>
+>
+
+type RequiredByKeys<T, K extends keyof T = keyof T> = Prettify<
+  {
+    [P in keyof T as P extends K ? P : never]-?: T[P]
+  } & {
+    [P in keyof T as P extends K ? never : P]: T[P]
+  }
+>
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
+import type { Prettify } from '../common/tools';
 
 interface User {
   name?: string
@@ -64,3 +75,5 @@ type cases = [
   > 查看解答：https://tsch.js.org/2759/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+
+type Res1 = RequiredByKeys<User, 'name'>;

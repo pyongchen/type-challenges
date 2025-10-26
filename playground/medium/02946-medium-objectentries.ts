@@ -23,7 +23,10 @@
 
 /* _____________ 你的代码 _____________ */
 
-type ObjectEntries<T> = any
+// 使用 -? 移除可选，是为了防止value中出现undefined，可查看ObjValue类型
+type ObjectEntries<T> = {
+  [K in keyof T]-?: [K, [T[K]] extends [undefined] ? undefined : Required<T>[K] ]
+}[keyof T]
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -50,3 +53,15 @@ type cases = [
   > 查看解答：https://tsch.js.org/2946/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+
+type PartialRes1 = Partial<Model>;
+type Res1 = ObjectEntries<Partial<Model>>;
+type Res2 = ObjectEntries<{ key?: undefined }>;
+
+
+
+type Obj = {
+  name: string,
+  age?: number
+};
+type ObjValue = Obj[keyof Obj]

@@ -19,7 +19,7 @@
 
 /* _____________ 你的代码 _____________ */
 
-type Reverse<T> = any
+type Reverse<T extends unknown[]> = T extends [infer First, ...infer Reset] ? [...Reverse<Reset>, First] : []
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

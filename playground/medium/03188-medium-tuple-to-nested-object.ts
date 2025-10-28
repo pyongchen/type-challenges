@@ -18,7 +18,13 @@
 
 /* _____________ 你的代码 _____________ */
 
-type TupleToNestedObject<T, U> = any
+type TupleToNestedObjectMy<T, U> = T extends [infer First, ... infer Right] ?
+  First extends PropertyKey ? { [K in First]: TupleToNestedObjectMy<Right, U>} : never
+   : U
+
+type TupleToNestedObject<T, U> = T extends [infer First, ... infer Right] ?
+   { [K in First & string]: TupleToNestedObjectMy<Right, U>}
+    : U
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -36,3 +42,9 @@ type cases = [
   > 查看解答：https://tsch.js.org/3188/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+
+
+type TTT = 'F';
+type DDD = {
+  [K in TTT & string]: 1
+}

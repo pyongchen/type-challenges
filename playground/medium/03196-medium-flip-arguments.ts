@@ -21,7 +21,11 @@
 
 /* _____________ 你的代码 _____________ */
 
-type FlipArguments<T> = any
+type ReverseArr<T extends unknown[]> = T extends [infer First, ...infer Reset] ? [...ReverseArr<Reset>, First] : []
+
+type FlipArguments<T extends (...args: any) => any> = T extends (...args: infer Args) => infer Res ? 
+  (...args: ReverseArr<Args>) => Res : never;
+
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

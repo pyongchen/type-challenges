@@ -20,7 +20,9 @@
 
 /* _____________ 你的代码 _____________ */
 
-type Flip<T> = any
+type Flip<T extends Record<string, string | number | boolean>> = {
+  [K in keyof T as `${T[K]}`]:K
+}
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect, NotEqual } from '@type-challenges/utils'
@@ -38,3 +40,5 @@ type cases = [
   > 查看解答：https://tsch.js.org/4179/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+
+type Res1 =  Flip<{ pi: 3.14, bool: true }>;

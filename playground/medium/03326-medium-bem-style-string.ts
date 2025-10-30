@@ -16,7 +16,8 @@
 
 /* _____________ 你的代码 _____________ */
 
-type BEM<B extends string, E extends string[], M extends string[]> = any
+type BEM<B extends string, E extends string[], M extends string[]> =
+ `${B}${E extends [] ? '' : `__${E[number]}`}${M extends [] ? '' : `--${M[number]}`}`
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -33,3 +34,5 @@ type cases = [
   > 查看解答：https://tsch.js.org/3326/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+
+type BemRes1 = BEM<'btn', ['price'], ['warning', 'success']>;

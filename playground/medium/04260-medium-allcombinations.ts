@@ -19,7 +19,13 @@
 
 /* _____________ 你的代码 _____________ */
 
-type AllCombinations<S> = any
+type StringToUnion<S extends string> = S extends `${infer F}${infer Reset}` ? (F | StringToUnion<Reset>) : '';
+
+type AllCombinations<
+  S extends string,
+  U extends string = StringToUnion<S>
+> = '' | { [K in U]: `${K}${AllCombinations<never, Exclude<U, K>>}` }[U]
+
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -38,3 +44,9 @@ type cases = [
   > 查看解答：https://tsch.js.org/4260/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+
+/*
+ * [U] 索引访问：用联合类型索引会得到所有对应值的联合
+ * type Obj = { 'A': 'valueA', 'B': 'valueB' }
+ * type Result = Obj['A' | 'B']  // 'valueA' | 'valueB'
+ */

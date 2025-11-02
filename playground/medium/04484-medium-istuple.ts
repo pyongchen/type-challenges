@@ -20,7 +20,8 @@
 
 /* _____________ 你的代码 _____________ */
 
-type IsTuple<T> = any
+type IsTuple<T> = [T] extends [never] ? false :
+  T extends readonly any[] ? number extends T["length"] ? false : true : false
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -40,3 +41,18 @@ type cases = [
   > 查看解答：https://tsch.js.org/4484/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+
+/*
+ * 数组:
+ * 1. 同类型元素的集合
+ * 2. 长度不确定的数据
+ * 
+ * 元组:
+ * 1. 函数返回多个不同类型的值：function getData(): [number, string, boolean]
+ * 2. 表示固定结构的数据：type Point = [number, number]
+ */
+
+type Arr1 = number[];
+type Arr2 = [number, string];
+type DD1 = Arr1['length'] // number
+type DD2 = Arr2['length'] // 2

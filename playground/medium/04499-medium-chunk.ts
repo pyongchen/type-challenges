@@ -19,7 +19,20 @@
 
 /* _____________ 你的代码 _____________ */
 
-type Chunk = any
+type Chunk<
+  T extends any[],
+  N extends number,
+  Current extends any[] = []
+> =
+  // 情况1: 当前块已经满了（达到 N 个元素）
+ Current["length"] extends N
+  ? [Current, ...Chunk<T, N, []>] // 保存当前块，重置继续
+  : // 情况2: 当前块还没满
+   T extends [infer F, ...infer Reset]
+    ? Chunk<Reset, N, [...Current, F]> // 继续累积
+    : // 情况3: 没有更多元素了
+      Current extends [] ? [] : [Current]
+ 
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -39,3 +52,5 @@ type cases = [
   > 查看解答：https://tsch.js.org/4499/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+type Res1 = Chunk<[1, 2, 3], 1>;
+type Res2 = Chunk<[1, 2, 3, 4], 5>;

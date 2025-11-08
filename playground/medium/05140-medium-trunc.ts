@@ -18,7 +18,10 @@
 
 /* _____________ 你的代码 _____________ */
 
-type Trunc = any
+type Trunc<S extends number | string> = `${S}` extends `${infer Num1}.${infer _}` ?
+ Num1 extends '' ? '0'
+   : Num1 extends '-' ? '-0' : Num1
+  : `${S}`
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -42,3 +45,6 @@ type cases = [
   > 查看解答：https://tsch.js.org/5140/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+
+type Res1 = Trunc<'-.3'>;
+type Res2 = Trunc<'.3'>;

@@ -18,7 +18,9 @@
 
 /* _____________ 你的代码 _____________ */
 
-type TrimRight<S extends string> = any
+type Trim = ' ' | '\n' | '\t'
+
+type TrimRight<S extends string> = S extends `${infer Left}${Trim}` ? TrimRight<Left> : S
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

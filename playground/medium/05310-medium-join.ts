@@ -19,7 +19,10 @@
 
 /* _____________ 你的代码 _____________ */
 
-type Join<T, U> = any
+type Join<T, U extends string | number = ','> =
+  T extends [infer F extends string, ...infer Reset] ?
+  Reset['length'] extends 0 ? `${F}` :
+  `${F}${U}${Join<Reset, U>}` : ''
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -39,3 +42,4 @@ type cases = [
   > 查看解答：https://tsch.js.org/5310/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+type Res1 = Join<['a', 'p', 'p', 'l', 'e'], '-'>;

@@ -18,7 +18,12 @@
 
 /* _____________ 你的代码 _____________ */
 
-type IndexOf<T, U> = any
+
+type MyEqual<X, Y> = (<T>() => T extends X ? 1 : 2) extends (<T>() => T extends Y ? 1 : 2) ? true : false
+
+type IndexOf<T extends any[],U, arr extends any[] = []> = T['length'] extends arr['length'] ? -1 :
+  MyEqual<U, T[arr['length']]> extends true ? arr['length']
+  : IndexOf<T, U, [...arr, '']>
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -39,3 +44,5 @@ type cases = [
   > 查看解答：https://tsch.js.org/5153/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+type Res1 = IndexOf<[any, 1], 1>;
+type Res2 = IndexOf<[0, 0, 0], 2>;

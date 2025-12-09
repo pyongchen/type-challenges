@@ -18,7 +18,8 @@
 
 /* _____________ 你的代码 _____________ */
 
-type ConstructTuple<L extends number> = any
+type ConstructTuple<L extends number, R extends any[] = []> = R['length'] extends L ?
+  R : ConstructTuple<L, [...R, unknown]>;
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -37,3 +38,5 @@ type cases = [
   > 查看解答：https://tsch.js.org/7544/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+
+type Res1 = ConstructTuple<3>;

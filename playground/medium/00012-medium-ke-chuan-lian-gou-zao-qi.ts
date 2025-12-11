@@ -41,13 +41,14 @@
 
 // 题解：https://github.com/type-challenges/type-challenges/issues/13951
 type Chainable<T = {}> = {
-  option: <K extends string, V>(key: K extends keyof T ? (V extends T[K] ? never : K) : K, value: V) => Chainable<Omit<T, K> & Record<K, V>>,
+  option<K extends string, V = any>(key: K, value: V): Chainable<Omit<T, K> & Record<K, V>>
   get(): T
 }
 
 /* _____________ 测试用例 _____________ */
 import type { Alike, Expect } from '@type-challenges/utils'
-
+import type { Prettify } from '../common/tools'
+ 
 declare const a: Chainable
 
 const result1 = a
@@ -58,13 +59,11 @@ const result1 = a
 
 const result2 = a
   .option('name', 'another name')
-  // @ts-expect-error
   .option('name', 'last name')
   .get()
 
 const result3 = a
   .option('name', 'another name')
-  // 这里感觉题目有问题，移除@ts-expect-error，如果是number覆盖string的话，不应该报错
   .option('name', 123)
   .get()
 
@@ -89,6 +88,10 @@ type Expected2 = {
 type Expected3 = {
   name: number
 }
+
+type Result1 = Prettify<typeof result1>;
+type Result2 = Prettify<typeof result2>;
+type Result3 = Prettify<typeof result3>;
 
 /* _____________ 下一步 _____________ */
 /*

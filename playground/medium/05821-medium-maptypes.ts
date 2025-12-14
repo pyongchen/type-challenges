@@ -39,7 +39,23 @@
 
 /* _____________ 你的代码 _____________ */
 
-type MapTypes<T, R> = any
+type MyMapTypes<T extends object, R> =
+  {
+    [K in keyof T]: [MapValue<T[K], R>] extends [never] ? T[K] : MapValue<T[K], R>
+  }
+
+type MapValue<V, R> = R extends { mapFrom: infer FromType, mapTo: infer ToType }
+  ? V extends FromType ? ToType : never
+  : never
+
+
+type MapTypes<T, R extends { mapFrom: any; mapTo: any }> = {
+  [K in keyof T]: T[K] extends R['mapFrom']
+  ? R extends { mapFrom: T[K] } // 需要注意 R 可能是联合类型，因此需要多一步 R extends {mapFrom: T[K]} 的判断
+  ? R['mapTo']
+  : never
+  : T[K]
+}
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -61,3 +77,5 @@ type cases = [
   > 查看解答：https://tsch.js.org/5821/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+
+type Res1 = MapTypes<{ date: string }, { mapFrom: string, mapTo: Date } | { mapFrom: string, mapTo: null }>

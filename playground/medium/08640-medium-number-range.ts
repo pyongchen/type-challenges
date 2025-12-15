@@ -16,7 +16,19 @@
 
 /* _____________ 你的代码 _____________ */
 
-type NumberRange<L, H> = any
+// 解释：https://github.com/type-challenges/type-challenges/issues/14155
+type NumberRange<
+  L,
+  H,
+  Arr extends any[] = [],
+  Res extends any[] = [],
+  Flag extends boolean = Arr['length'] extends L ? true : false, // 根据 Flag 来判断是否开始插入 Res
+> =
+  Flag extends true ?
+    Arr['length'] extends H ?
+      [...Res, Arr['length']][number] // 强制加入最后一项
+      : NumberRange<L, H, [...Arr, ''], [...Res, Arr['length']], Flag>
+    : NumberRange<L, H, [...Arr, '']>
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -50,3 +62,5 @@ type cases = [
   > 查看解答：https://tsch.js.org/8640/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+
+type Res1 = NumberRange<0, 2>

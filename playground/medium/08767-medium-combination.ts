@@ -18,7 +18,17 @@
 
 /* _____________ 你的代码 _____________ */
 
-type Combination<T extends string[]> = any
+/*
+ * 使用 A = U 保存完整集合
+ * 使用分布式条件类型遍历每个元素
+ * 使用 Exclude 获取剩余元素, U & string 确保类型正确
+ */
+
+type Expand<U, All = U> = U extends All ?
+  `${U & string}` | `${U & string} ${Expand<Exclude<All, U>>}`
+  : never;
+
+type Combination<T extends string[]> = Expand<T[number]>
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -49,3 +59,5 @@ type cases = [
   > 查看解答：https://tsch.js.org/8767/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+
+type Res1 = Combination<['one', 'two']>;
